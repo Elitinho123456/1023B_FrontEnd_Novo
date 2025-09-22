@@ -19,12 +19,13 @@ export default function App() {
     }, []);
 
     function addCart (id: string) {
+        const clientId = '123'
         fetch('/api/carrinho', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ id })
+            body: JSON.stringify({ id, clientId })
         })
     }
 
