@@ -1,35 +1,66 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from "react";
 
-function App() {
-  const [count, setCount] = useState(0)
-
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+type Produtos = {
+    _id: string;
+    nome: string;
+    descricao: string;
+    preco: number;
+    quantidade: number;
 }
 
-export default App
+export default function App() {
+
+    const [produtos, setProdutos] = useState<Produtos[]>([]);
+
+    useEffect(() => {
+        fetch('/api/produtos')
+            .then(response => response.json())
+            .then(data => setProdutos(data))
+    }, []);
+
+    const handleForm = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+
+        const form = event.currentTarget;
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+
+
+        fetch('/api/produtos', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => response.json())
+            .then(data => setProdutos([...produtos, data]))
+    }
+
+    return (
+        <div className="bg-gray-50 min-h-screen flex flex-col">
+
+
+            <div>Cadastro de Produtos</div>
+            <form onSubmit={handleForm}>
+                <input type="text" name="nome" placeholder="Nome" />
+                <input type="text" name="descricao" placeholder="Descricao" />
+                <input type="number" name="preco" placeholder="Preco" />
+                <input type="number" name="quantidade" placeholder="Quantidade" />
+                <button type="submit">Cadastrar</button>
+            </form>
+
+            <h1>Produtos</h1>
+
+            {produtos.map((produto) => (
+                <div key={produto._id}>
+                    <h2>{produto.nome}</h2>
+                    <p>{produto.preco}</p>
+                    <p>{produto.descricao}</p>
+                    <p>{produto.quantidade}</p>
+                </div>
+            ))}
+
+        </div>
+    )
+}
