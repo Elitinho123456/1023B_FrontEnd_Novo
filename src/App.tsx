@@ -18,6 +18,16 @@ export default function App() {
             .then(data => setProdutos(data))
     }, []);
 
+    function addCart (id: string) {
+        fetch('/api/carrinho', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ id })
+        })
+    }
+
     const handleForm = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
@@ -58,6 +68,7 @@ export default function App() {
                     <p>{produto.preco}</p>
                     <p>{produto.descricao}</p>
                     <p>{produto.quantidade}</p>
+                    <button onClick={() => addCart(produto._id)}>Adicionar ao Carrinho</button>
                 </div>
             ))}
 
