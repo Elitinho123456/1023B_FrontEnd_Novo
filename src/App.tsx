@@ -10,6 +10,7 @@ type Produto = {
   descricao: string;
   preco: number;
   quantidade: number;
+  imagem: string;
 };
 
 function Home() {
@@ -39,7 +40,10 @@ function Home() {
 
   const addToCart = async (id: string) => {
     if (!isLoggedIn) {
-      alert('Por favor, faça login para adicionar itens ao carrinho.');
+      alert('Por favor, faça login para adicionar itens ao carrinho. Redirecionando...');
+      setTimeout(() => {
+        window.location.href = '/login';
+      }, 1000);
       return;
     }
 
@@ -151,9 +155,7 @@ function Home() {
                 <div key={produto._id} className="group">
                   <div className="w-full aspect-w-1 aspect-h-1 bg-gray-200 rounded-lg overflow-hidden xl:aspect-w-7 xl:aspect-h-8">
                     <div className="w-full h-full object-center object-cover group-hover:opacity-75 flex items-center justify-center bg-gray-100">
-                      <svg className="h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                      </svg>
+                      <img src={produto.imagem} alt={produto.nome} className="w-full h-full object-cover" />
                     </div>
                   </div>
                   <h3 className="mt-4 text-sm text-gray-700">{produto.nome}</h3>
@@ -165,7 +167,7 @@ function Home() {
                   <button
                     onClick={() => addToCart(produto._id)}
                     disabled={produto.quantidade <= 0}
-                    className={`mt-2 w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${
+                    className={`mt-2 w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 cursor-pointer ${
                       produto.quantidade <= 0 ? 'opacity-50 cursor-not-allowed' : ''
                     }`}
                   >

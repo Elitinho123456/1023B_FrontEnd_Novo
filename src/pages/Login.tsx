@@ -24,21 +24,32 @@ export default function Login() {
     setError('');
 
     try {
-      const response = await fetch('/api/users', {
-        method: 'GET',
+
+      const response = await fetch('/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: user.email,
+          senha: user.senha
+        }),
       });
 
       if (!response.ok) {
-        throw new Error('Credenciais inválidas');
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Credenciais inválidas');
       }
 
       const data = await response.json();
+
+
       localStorage.setItem('token', data.token);
-      localStorage.setItem('userId', data.userId);
-      
+      localStorage.setItem('userId', data._id);
+
       navigate('/');
-    } catch (err) {
-      setError('Falha no login. Verifique suas credenciais.');
+    } catch (err: any) {
+      setError(err.message || 'Falha no login. Verifique suas credenciais.');
       console.error('Login error:', err);
     }
   };
@@ -47,13 +58,13 @@ export default function Login() {
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
         <h1 className="text-2xl font-bold text-center mb-6">Login</h1>
-        
+
         {error && (
           <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
             {error}
           </div>
         )}
-        
+
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700">
@@ -69,7 +80,7 @@ export default function Login() {
               required
             />
           </div>
-          
+
           <div>
             <label htmlFor="senha" className="block text-sm font-medium text-gray-700">
               Senha
@@ -84,7 +95,7 @@ export default function Login() {
               required
             />
           </div>
-          
+
           <div>
             <button
               type="submit"
@@ -94,11 +105,11 @@ export default function Login() {
             </button>
           </div>
         </form>
-        
+
         <div className="mt-4 text-center">
           <p className="text-sm text-gray-600">
             Não tem uma conta?{' '}
-            <button 
+            <button
               onClick={() => navigate('/register')}
               className="font-medium text-blue-600 hover:text-blue-500"
             >

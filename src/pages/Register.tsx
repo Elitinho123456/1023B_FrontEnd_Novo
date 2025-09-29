@@ -67,10 +67,14 @@ export default function Register() {
       // Redireciona para a página de login após o cadastro bem-sucedido
       navigate('/login');
     } catch (err) {
+
       setError(err instanceof Error ? err.message : 'Erro ao criar conta. Tente novamente.');
       console.error('Registration error:', err);
+
     } finally {
+
       setIsLoading(false);
+      
     }
   };
 
