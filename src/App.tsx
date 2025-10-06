@@ -48,7 +48,7 @@ function Home() {
     }
 
     try {
-      const response = await fetch('/api/carrinho', {
+      const response = await fetch('api/carrinho', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -61,11 +61,12 @@ function Home() {
         })
       });
 
-      if (!response.ok) throw new Error('Erro ao adicionar ao carrinho');
+      // if (!response.ok) throw new Error('Erro ao adicionar ao carrinho');
+      console.log(await response.json())
       
       alert('Produto adicionado ao carrinho com sucesso!');
     } catch (err) {
-      console.error('Error adding to cart:', err);
+      console.log('Error adding to cart:', err);
       alert('Erro ao adicionar ao carrinho. Tente novamente.');
     }
   };

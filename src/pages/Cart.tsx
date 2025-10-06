@@ -30,16 +30,16 @@ export default function Cart() {
     }
 
     try {
-      const response = await fetch(`/api/carrinho?usuarioId=${userId}`);
-      
-      if (!response.ok) {
-        if (response.status === 404) {
-          // Carrinho vazio
-          setCart(null);
-          return;
-        }
-        throw new Error('Erro ao carregar o carrinho');
-      }
+      const response = await fetch(`api/carrinho?usuarioId=${userId}`);
+      console.log(response)
+      // if (!response.ok) {
+      //   if (response.status === 404) {
+      //     // Carrinho vazio
+      //     setCart(null);
+      //     return;
+      //   }
+      //   throw new Error('Erro ao carregar o carrinho');
+      // }
 
       const data = await response.json();
       setCart(data);
@@ -101,7 +101,7 @@ export default function Cart() {
     if (!confirm('Tem certeza que deseja remover este item do carrinho?')) return;
 
     try {
-      const response = await fetch('/api/carrinho', {
+      const response = await fetch('/api/carrinho/item', {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
